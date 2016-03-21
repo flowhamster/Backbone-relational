@@ -1299,8 +1299,12 @@
 		initializeRelations: function( options ) {
 			this.acquire(); // Setting up relations often also involve calls to 'set', and we only want to enter this function once
 			this._relations = {};
+			var relations = this.relations
+			if(typeof relations == 'function') {
+				relations = this.relations()
+			}
 
-			_.each( this.relations || [], function( rel ) {
+			_.each( relations || [], function( rel ) {
 				Backbone.Relational.store.initializeRelation( this, rel, options );
 			}, this );
 
@@ -1460,7 +1464,7 @@
 								_.each( createdModels, function( model ) {
 									model.trigger( 'destroy', model, model.collection, options );
 								});
-								
+
 								options.error && options.error.apply( models, arguments );
 							},
 							url: setUrl
@@ -1499,7 +1503,7 @@
 				}
 			);
 		},
-		
+
 		deferArray: function(deferArray) {
 			return Backbone.$.when.apply(null, deferArray);
 		},
