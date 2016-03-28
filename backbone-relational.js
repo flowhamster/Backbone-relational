@@ -1673,7 +1673,12 @@
 		setup: function( superModel ) {
 			// We don't want to share a relations array with a parent, as this will cause problems with reverse
 			// relations. Since `relations` may also be a property or function, only use slice if we have an array.
-			this.prototype.relations = ( this.prototype.relations || [] ).slice( 0 );
+			// this.prototype.relations = ( this.prototype.relations || [] ).slice( 0 );
+
+			var relations = this.prototype.relations
+			if(typeof relations == 'function') {
+				relations = this.relations()
+			}
 
 			this._subModels = {};
 			this._superModel = null;
@@ -1688,7 +1693,7 @@
 			}
 
 			// Initialize all reverseRelations that belong to this new model.
-			_.each( this.prototype.relations || [], function( rel ) {
+			_.each( relations || [], function( rel ) {
 				if ( !rel.model ) {
 					rel.model = this;
 				}
