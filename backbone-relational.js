@@ -305,10 +305,11 @@
 		 * @private
 		 */
 		_addRelation: function( type, relation ) {
-			if ( !type.prototype.relations ) {
-				type.prototype.relations = [];
-			}
-			type.prototype.relations.push( relation );
+			// if ( !type.prototype.relations ) {
+			// 	type.prototype.relations = [];
+			// }
+			// type.prototype.relations  = type.relations
+			type.relations().push( relation );
 
 			_.each( type._subModels || [], function( subModel ) {
 				this._addRelation( subModel, relation );
@@ -1674,8 +1675,7 @@
 			// We don't want to share a relations array with a parent, as this will cause problems with reverse
 			// relations. Since `relations` may also be a property or function, only use slice if we have an array.
 			// this.prototype.relations = ( this.prototype.relations || [] ).slice( 0 );
-
-			var relations = this.prototype.relations
+			var relations = this.relations
 			if(typeof relations == 'function') {
 				relations = this.relations()
 			}
